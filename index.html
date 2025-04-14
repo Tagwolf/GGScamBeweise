@@ -1,80 +1,51 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <title>Beweise von GG</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #111;
-      color: white;
-      padding: 20px;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    .hidden { display: none; }
-    .gallery img {
-      max-width: 200px;
-      margin: 5px;
-      border-radius: 8px;
-      border: 1px solid #444;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Beweis-Upload</title>
 </head>
 <body>
-  <h1>🧾 GGScamBeweise</h1>
 
-  <div id="gallery">
-    <!-- PHP listet hier alle Ordner + Bilder auf -->
-    <?php
-      $baseDir = "uploads";
-      if (is_dir($baseDir)) {
-        foreach (scandir($baseDir) as $folder) {
-          if ($folder === '.' || $folder === '..') continue;
-          echo "<h2>$folder</h2><div class='gallery'>";
-          foreach (scandir("$baseDir/$folder") as $file) {
-            if (in_array(pathinfo($file, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
-              $path = "$baseDir/$folder/$file";
-              echo "<a href='$path' download><img src='$path' alt='Bild'></a>";
-            }
-          }
-          echo "</div>";
-        }
-      }
-    ?>
-  </div>
+  <h1>Upload von Beweisen</h1>
+
+  <!-- Formular zum Hochladen von Ordnern und Bildern -->
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <label for="ordnername">Ordnername:</label><br>
+    <input type="text" id="ordnername" name="ordnername" required><br><br>
+
+    <label for="bilder">Bilder auswählen:</label><br>
+    <input type="file" id="bilder" name="bilder[]" multiple required><br><br>
+
+    <button type="submit">Hochladen</button>
+  </form>
 
   <hr>
 
-  <div id="uploadSection" class="hidden">
-    <h2>🔐 Upload-Bereich (nur mit Passwort)</h2>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-      <label>Neuer Ordnername:</label><br>
-      <input type="text" name="ordnername" required><br><br>
-      <label>Dateien auswählen:</label><br>
-      <input type="file" name="bilder[]" multiple required><br><br>
-      <button type="submit">Hochladen</button>
-    </form>
-  </div>
+  <!-- Anzeige der Ordner und Bilder -->
+  <h2>Alle Beweisordner</h2>
+  <?php
+    // PHP-Code, um Ordner und Bilder anzuzeigen (siehe oben)
+    $baseDir = "uploads";
+    if (is_dir($baseDir)) {
+        foreach (scandir($baseDir) as $folder) {
+            if ($folder === '.' || $folder === '..') continue;
 
-  <div id="loginSection">
-    <h2>🔑 Admin Login</h2>
-    <input type="password" id="adminPass" placeholder="Passwort">
-    <button onclick="checkPass()">Einloggen</button>
-    <p id="loginMsg" style="color:red;"></p>
-  </div>
+            echo "<h3>$folder</h3><div class='gallery'>";
 
-  <script>
-    function checkPass() {
-      const input = document.getElementById("adminPass").value;
-      if (input === "deinpasswort") {
-        document.getElementById("uploadSection").classList.remove("hidden");
-        document.getElementById("loginSection").classList.add("hidden");
-      } else {
-        document.getElementById("loginMsg").innerText = "Falsches Passwort.";
-      }
+            $folderPath = "$baseDir/$folder";
+            if (is_dir($folderPath)) {
+                foreach (scandir($folderPath) as $file) {
+                    if (in_array(pathinfo($file, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+                        $filePath = "$folderPath/$file";
+                        echo "<a href='$filePath' download><img src='$filePath' alt='Bild' style='width: 100px; height: 100px;'></a>";
+                    }
+                }
+            }
+
+            echo "</div>";
+        }
     }
-  </script>
+  ?>
+
 </body>
 </html>
