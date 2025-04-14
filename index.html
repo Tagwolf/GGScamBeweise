@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Beweise von GG</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .hidden { display: none; }
+    .gallery img {
+      max-width: 200px;
+      margin: 5px;
+      border-radius: 8px;
+      border: 1px solid #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧾 GGScamBeweise</h1>
+
+  <div id="gallery">
+    <!-- PHP listet hier alle Ordner + Bilder auf -->
+    <?php
+      $baseDir = "uploads";
+      if (is_dir($baseDir)) {
+        foreach (scandir($baseDir) as $folder) {
+          if ($folder === '.' || $folder === '..') continue;
+          echo "<h2>$folder</h2><div class='gallery'>";
+          foreach (scandir("$baseDir/$folder") as $file) {
+            if (in_array(pathinfo($file, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+              $path = "$baseDir/$folder/$file";
+              echo "<a href='$path' download><img src='$path' alt='Bild'></a>";
+            }
+          }
+          echo "</div>";
+        }
+      }
+    ?>
+  </div>
+
+  <hr>
+
+  <div id="uploadSection" class="hidden">
+    <h2>🔐 Upload-Bereich (nur mit Passwort)</h2>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+      <label>Neuer Ordnername:</label><br>
+      <input type="text" name="ordnername" required><br><br>
+      <label>Dateien auswählen:</label><br>
+      <input type="file" name="bilder[]" multiple required><br><br>
+      <button type="submit">Hochladen</button>
+    </form>
+  </div>
+
+  <div id="loginSection">
+    <h2>🔑 Admin Login</h2>
+    <input type="password" id="adminPass" placeholder="Passwort">
+    <button onclick="checkPass()">Einloggen</button>
+    <p id="loginMsg" style="color:red;"></p>
+  </div>
+
+  <script>
+    function checkPass() {
+      const input = document.getElementById("adminPass").value;
+      if (input === "deinpasswort") {
+        document.getElementById("uploadSection").classList.remove("hidden");
+        document.getElementById("loginSection").classList.add("hidden");
+      } else {
+        document.getElementById("loginMsg").innerText = "Falsches Passwort.";
+      }
+    }
+  </script>
+</body>
+</html>
