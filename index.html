@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>📁 Öffentliche Sammelordner</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function trackAction(actionText) {
+      fetch('https://webhook.site/DEINE-ID-HIER', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          action: actionText,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        })
+      }).catch(err => console.error("Tracking-Fehler:", err));
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>📁 Öffentliche Sammelordner</h1>
+    <div class="folder-list">
+      <a href="ordner1/" onclick="trackAction('📂 Ordner 1 geöffnet')">📂 Ordner 1</a>
+      <a href="ordner2/" onclick="trackAction('📂 Ordner 2 geöffnet')">📂 Ordner 2</a>
+      <a href="dokument.pdf" onclick="trackAction('📄 dokument.pdf geöffnet')" target="_blank">📄 dokument.pdf</a>
+    </div>
+  </div>
+</body>
+</html>
