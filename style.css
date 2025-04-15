@@ -1,0 +1,39 @@
+
+body {
+  background: #1e1e2f;
+  color: #fff;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.container {
+  background: #2e2e4d;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  color: #ffcc70;
+  margin-bottom: 2rem;
+}
+
+.folder-list a {
+  display: block;
+  background: #444;
+  color: white;
+  text-decoration: none;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.folder-list a:hover {
+  background: #666;
+  transform: scale(1.03);
+}
